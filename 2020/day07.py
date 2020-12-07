@@ -34,9 +34,9 @@ def mainshiny():
         if contshiny(bagcol):
             count +=1
 
-        print(f"Done: {done}")
+        # print(f"Done: {done}")
 
-    print(count)
+    return count
 
 def contshiny(color):
     if color == "shinygold":
@@ -47,23 +47,18 @@ def contshiny(color):
         return any(contshiny(innercol[0]) for innercol in bagsdict[color])
 
 
-
 def countbags(color):
     if color == "":
         return 1
    
     summ = 1
     for elem in bagsdict[color]:
-        print(elem)
-        summ += elem[1] * countbags2(elem[0])
-        print(summ)
+        summ += elem[1] * countbags(elem[0])
     return summ
-        
-
 
 finddict()
 # Part 1
-print(sum(contshiny(color) for color in bagsdict.keys())-1)
+print(mainshiny())
 # Part 2
 print(countbags("shinygold")-1)
 
