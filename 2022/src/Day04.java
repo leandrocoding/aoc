@@ -8,7 +8,6 @@ public class Day04 {
 
 	public static void main(String[] args) throws IOException {
 		Path filepath = Paths.get("day04.txt");
-//		Path filepath = Paths.get("test.txt");
 		
 		ArrayList<String> inputList= (ArrayList<String>) Files.readAllLines(filepath);
 		int counter1 = 0;
@@ -27,19 +26,15 @@ public class Day04 {
 			}else if(rightmin>=leftmin && rightmax <=leftmax) {
 				counter1++;
 			}
-			
 			//Part 2
-			
 			if(leftmax>=rightmin && leftmin<=rightmax) {
 				counter2++;
 			}else if(rightmax>=leftmin && rightmin <=leftmax) {
 				counter2++;
 			}
-			
 		}
 		System.out.println("Part 1: " + counter1);
 		System.out.println("Part 2: " + counter2);
-
 
 	}
 
