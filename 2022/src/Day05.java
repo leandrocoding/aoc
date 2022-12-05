@@ -1,6 +1,5 @@
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,35 +8,32 @@ import java.util.Stack;
 public class Day05 {
 
 	public static void main(String[] args) throws IOException {
-		Path filepath = Paths.get("day05.txt");
-				
-//		ArrayList<String> inputList= (ArrayList<String>) Files.readAllLines(filepath);
-		String inputstring = Files.readString(filepath);
+		String inputstring = Files.readString(Paths.get("day05.txt"));
 		String[] splitted = inputstring.split("((\\n\\r)|(\\r\\n)){2}|(\\r){2}|(\\n){2}");
-		String[] originStacks = splitted[1].split("\\n");
 		
-
+		int numberOfStacks = splitted[0].split("\\n")[0].toCharArray().length/4;
+		
 		ArrayList<Stack<Character>> crateStacks1 = new ArrayList<Stack<Character>>();
 		ArrayList<Stack<Character>> crateStacks2 = new ArrayList<Stack<Character>>();
 		
-		//Input into Stacks
-		for(int i = 0; i<originStacks.length ; i++) {
+		//Input into Stacks n Stacks
+		for(int i = 0; i<numberOfStacks ; i++) {
 			crateStacks1.add(i,new Stack<Character>());
 			crateStacks2.add(i,new Stack<Character>());
-			for(char c : originStacks[i].strip().toCharArray()) {
-				
-				crateStacks1.get(i).push(c);
-				crateStacks2.get(i).push(c);
-				
+		}
+		
+		for(String line: splitted[0].split("\\n")) {
+			for(int i = 0; i<numberOfStacks;i++) {
+				int charpos = 1+4*i;
+				if(line.charAt(charpos)!=' ') {
+					crateStacks1.get(i).add(0,line.charAt(charpos));
+					crateStacks2.get(i).add(0,line.charAt(charpos));
+					
+				}
 			}
 		}
 		
-		
-		//phrasing of Input2
-		
-		//move 2 from 2 to 8
-		
-		String[] moveInst = splitted[2].split("\\n");
+		String[] moveInst = splitted[1].split("\\n");
 		
 		for(String inst : moveInst) {
 			String[] is = inst.split(" ");
@@ -52,17 +48,15 @@ public class Day05 {
 			}
 			Collections.reverse(tempP2);
 			crateStacks2.get(t).addAll(tempP2);
-			
-			
-			
 		}
 		
 		//get Result
-		
+		System.out.print("Part 1: ");
 		for(Stack<Character> st : crateStacks1) {
 			System.out.print(st.peek());
 		}
 		System.out.println();
+		System.out.print("Part 2: ");
 		for(Stack<Character> st : crateStacks2) {
 			System.out.print(st.peek());
 		}
