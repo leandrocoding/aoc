@@ -1,36 +1,6 @@
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedList;
-
-import javax.swing.text.StyledEditorKit.ForegroundAction;
-
-//$ cd /
-//$ ls
-//dir a
-//14848514 b.txt
-//8504156 c.dat
-//dir d
-//$ cd a
-//$ ls
-//dir e
-//29116 f
-//2557 g
-//62596 h.lst
-//$ cd e
-//$ ls
-//584 i
-//$ cd ..
-//$ cd ..
-//$ cd d
-//$ ls
-//4060174 j
-//8033020 d.log
-//5626152 d.ext
-//7214296 k
+import java.nio.file.*;
+import java.util.*;
 
 public class Day07 {
 
@@ -40,20 +10,13 @@ public class Day07 {
 		
 		ArrayList<String> inputList= (ArrayList<String>) Files.readAllLines(filepath);
 		
-		//input:
-		
 		Folder root = new Folder("/",null);
 		FileSystem fs = new FileSystem();
 		fs.curFolder = root;
-		
-		
-		
-		
+
 		for (String line : inputList) {
 			if(line.charAt(0)=='$') {
-				//$ cd ..
-				//$ cd d
-				//$ ls
+		
 				String[] splitt = line.split(" ");
 				String op = splitt[1];
 				if(op.equals("cd")) {
@@ -83,18 +46,12 @@ public class Day07 {
 					}
 					
 				}else if(op.equals("ls")) {
-					continue;
-					
+					continue;	
 				}
-				//
-				
-				
 			}else {
 				//printing contents of currFolder
 				String[] splitt = line.split(" ");
 				if(splitt[0].equals("dir")) {
-					
-					
 					//add subDir
 					
 					Folder newFolder = new Folder(splitt[1],fs.curFolder);
@@ -102,9 +59,8 @@ public class Day07 {
 						fs.curFolder.children.add(newFolder);
 						fs.allFolders.add(newFolder);
 					}else {
-						System.out.println("Crazyyyyyyyyyyyyyyyyyyyyyyyyyyyyy");
+						System.out.println("Interesting...");
 					}
-					
 				}else {
 					int currSize = Integer.parseInt(splitt[0]);
 					String fileName = splitt[1];
@@ -115,36 +71,29 @@ public class Day07 {
 						for (Folder par : fs.allCurParents) {
 							par.sumOfSizes+=currSize;
 							par.allSubFiles.add(newFile);
-						}
-						
-						
+						}	
 					}
-					
-					
 				}
-				
 			}
 		}
+		//Getting the result: 
+		
 		int sum = 0;
 		int smallestPossible = Integer.MAX_VALUE;
 		
-		
-		fs.remainingSpace= fs.totalSpace - root.sumOfSizes;
+		fs.remainingSpace = fs.totalSpace - root.sumOfSizes;
 		int freeUp = fs.neededSpace - fs.remainingSpace;
 		
 		for (Folder fold : fs.allFolders) {
 			sum+= fold.sumOfSizes<=100000? fold.sumOfSizes : 0;
 			smallestPossible = fold.sumOfSizes>=freeUp && fold.sumOfSizes<smallestPossible ? fold.sumOfSizes : smallestPossible;
 		}
+
+		
 		System.out.println("Part 1 : " + sum);
 		System.out.println("Part 2 : " + smallestPossible);
 
-		
-		
-		
-		
 	}
-
 }
 
 class FileSystem {
@@ -159,7 +108,6 @@ class FileSystem {
 		allCurParents = new HashSet<Folder>();
 		allFolders = new HashSet<Folder>();
 	}
-	
 }
 
 class FileSystemElement{
@@ -171,9 +119,7 @@ class FileSystemElement{
 	String getName() {
 		return name;
 	}
-	
-	
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof FileSystemElement)) {
@@ -191,8 +137,6 @@ class FileSystemElement{
 		}
 		return true;
 	}
-	
-	
 }
 
 class Folder extends FileSystemElement implements Comparable<Folder>{
@@ -216,8 +160,6 @@ class Folder extends FileSystemElement implements Comparable<Folder>{
 		
 		return Integer.compare(this.sumOfSizes, o.sumOfSizes);
 	}
-	
-	
 }
 
 class File extends FileSystemElement{
@@ -228,7 +170,4 @@ class File extends FileSystemElement{
 		this.name = name;
 		this.size = size;
 	}
-	
-	
-	
 }
